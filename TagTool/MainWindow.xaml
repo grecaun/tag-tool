@@ -5,8 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TagTool"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Tag Tool" Height="450" Width="325" MaxWidth="325" MinWidth="325" BorderThickness="1">
     <Grid>
-        
+        <Button Content="Add Range" Width="100" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10" Click="AddRange_Click" />
+        <ComboBox Height="25" Width="115" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,10,80,10" Name="SaveSpot" SelectedIndex="0">
+            <ComboBoxItem Content="Here" />
+            <ComboBoxItem Content="Public Documents" />
+            <ComboBoxItem Content="Custom" />
+        </ComboBox>
+        <Button Width="60" Height="25" Content="Save" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,10,10,10" Click="Save_Click"/>
+        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,35,0,0" Content="Start Bib #" />
+        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="85,35,0,0" Content="End Bib #" />
+        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="160,35,0,0" Content="Start Tag #" />
+        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="235,35,0,0" Content="End Tag #" />
+        <Grid x:Name="itemsWindow" VerticalAlignment="Top" Margin="0,60,0,0" >
+            <ListBox x:Name="correlationBox" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
     </Grid>
 </Window>
