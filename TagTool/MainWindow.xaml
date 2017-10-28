@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TagTool"
         mc:Ignorable="d"
-        Title="Tag Tool" Height="450" Width="325" MaxWidth="325" MinWidth="325" BorderThickness="1">
+        Title="Tag Tool" Height="450" Width="390" MaxWidth="390" MinWidth="390" BorderThickness="1">
     <Grid>
-        <Button Content="Add Range" Width="100" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10" Click="AddRange_Click" />
-        <ComboBox Height="25" Width="115" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,10,80,10" Name="SaveSpot" SelectedIndex="0">
+        <Button Content="Add Range" Width="90" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10" Click="AddRange_Click" />
+        <ComboBox x:Name="SavePlace" Height="25" Width="115" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,10,80,10" SelectedIndex="0">
             <ComboBoxItem Content="Here" />
             <ComboBoxItem Content="Public Documents" />
             <ComboBoxItem Content="Custom" />
