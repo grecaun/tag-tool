@@ -115,18 +115,12 @@ namespace TagTool
                 {
                     StartBib.Text = replaceStr;
                 }
-                int startVal = -1, endVal = -1;
+                int startVal = -1;
                 int.TryParse(StartBib.Text, out startVal);
-                int.TryParse(EndBib.Text, out endVal);
-                if (startVal >= endVal)
-                {
-                    endVal = startVal;
-                }
                 if (string.CompareOrdinal(StartBib.Text, startVal.ToString()) != 0)
                 {
                     StartBib.Text = startVal.ToString();
                 }
-                EndBib.Text = endVal.ToString();
                 UpdateEndChip();
             }
 
@@ -137,18 +131,12 @@ namespace TagTool
                 {
                     EndBib.Text = replaceStr;
                 }
-                int startVal = -1, endVal = -1;
-                int.TryParse(StartBib.Text, out startVal);
+                int endVal = -1;
                 int.TryParse(EndBib.Text, out endVal);
-                if (startVal >= endVal)
-                {
-                    startVal = endVal;
-                }
                 if (string.CompareOrdinal(EndBib.Text, endVal.ToString()) != 0)
                 {
                     EndBib.Text = endVal.ToString();
                 }
-                StartBib.Text = startVal.ToString();
                 UpdateEndChip();
             }
 
@@ -218,7 +206,7 @@ namespace TagTool
                     StartChip = startChip,
                     EndChip = endChip
                 };
-                bool conflicts = false;
+                bool conflicts = !curRange.IsValid();
                 foreach (Range r in ranges)
                 {
                     if (r.Violates(curRange))

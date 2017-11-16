@@ -32,6 +32,11 @@ namespace TagTool
             return StartBib.Equals(other.StartBib) && EndBib.Equals(other.EndBib) && StartChip.Equals(other.StartChip) && EndChip.Equals(other.EndChip);
         }
 
+        public bool IsValid()
+        {
+            return StartBib <= EndBib;
+        }
+
         public bool Violates(Range other)
         {
             return (other.StartBib >= this.StartBib && other.StartBib <= this.EndBib) || (other.EndBib >= this.StartBib && other.EndBib <= this.EndBib)
