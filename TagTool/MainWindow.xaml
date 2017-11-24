@@ -7,19 +7,19 @@
         mc:Ignorable="d"
         Title="Tag Tool" Height="450" Width="390" MaxWidth="390" MinWidth="390" BorderThickness="1">
     <Grid>
-        <Button Content="Add Range" Width="90" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10" Click="AddRange_Click" />
-        <ComboBox x:Name="SavePlace" Height="25" Width="115" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,10,80,10" SelectedIndex="0">
+        <Button Content="Add Range" Width="90" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10" Click="AddRange_Click" TabIndex="1" />
+        <ComboBox x:Name="SavePlace" Height="25" Width="115" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,10,80,10" SelectedIndex="0" TabIndex="2" >
             <ComboBoxItem Content="Here" />
             <ComboBoxItem Content="Public Documents" />
             <ComboBoxItem Content="Custom" />
         </ComboBox>
-        <Button Width="60" Height="25" Content="Save" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,10,10,10" Click="Save_Click"/>
-        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,35,0,0" Content="Start Bib #" />
-        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="85,35,0,0" Content="End Bib #" />
-        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="160,35,0,0" Content="Start Tag #" />
-        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="235,35,0,0" Content="End Tag #" />
+        <Button Width="60" Height="25" Content="Save" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,10,10,10" Click="Save_Click" TabIndex="3" />
+        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,35,0,0" Content="Start Bib #" IsTabStop="False" />
+        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="85,35,0,0" Content="End Bib #" IsTabStop="False" />
+        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="160,35,0,0" Content="Start Tag #" IsTabStop="False" />
+        <Label Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="235,35,0,0" Content="End Tag #" IsTabStop="False" />
         <Grid x:Name="itemsWindow" VerticalAlignment="Top" Margin="0,60,0,0" >
-            <ListBox x:Name="correlationBox" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+            <ListBox x:Name="correlationBox" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" KeyboardNavigation.TabNavigation="Continue" >
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />

@@ -13,10 +13,12 @@ namespace TagTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        int num = 0;
+
         public MainWindow()
         {
             InitializeComponent();
-            correlationBox.Items.Add(new ATagRange(correlationBox));
+            correlationBox.Items.Add(new ATagRange(correlationBox, num++));
         }
 
         private class ATagRange : ListBoxItem
@@ -29,10 +31,11 @@ namespace TagTool
 
             ListBox parent;
 
-            public ATagRange(ListBox correlationBox)
+            public ATagRange(ListBox correlationBox, int num)
             {
                 Grid theGrid = new Grid();
                 this.Content = theGrid;
+                this.IsTabStop = false;
                 int lastEndBib = 0, lastEndChip = 0;
                 parent = correlationBox;
                 if (correlationBox.Items.Count > 0)
@@ -57,6 +60,7 @@ namespace TagTool
                     Margin = new Thickness(2, 2, 2, 2)
                 };
                 StartBib.TextChanged += new TextChangedEventHandler(this.StartBib_TextChanged);
+                StartBib.GotFocus += new RoutedEventHandler(this.SelectAll);
                 StartBib.KeyDown += new KeyEventHandler(this.KeyPressHandler);
                 EndBib = new TextBox
                 {
@@ -65,6 +69,7 @@ namespace TagTool
                     Margin = new Thickness(2, 2, 2, 2)
                 };
                 EndBib.TextChanged += new TextChangedEventHandler(this.EndBib_TextChanged);
+                EndBib.GotFocus += new RoutedEventHandler(SelectAll);
                 EndBib.KeyDown += new KeyEventHandler(this.KeyPressHandler);
                 StartChip = new TextBox
                 {
@@ -73,11 +78,13 @@ namespace TagTool
                     Margin = new Thickness(2, 2, 2, 2)
                 };
                 StartChip.TextChanged += new TextChangedEventHandler(this.StartChip_TextChanged);
+                StartChip.GotFocus += new RoutedEventHandler(SelectAll);
                 StartChip.KeyDown += new KeyEventHandler(this.KeyPressHandler);
                 EndChip = new Label
                 {
                     Content = String.Format("{0}", lastEndChip + 1),
-                    Margin = new Thickness(2, 2, 2, 2)
+                    Margin = new Thickness(2, 2, 2, 2),
+                    IsTabStop = false
                 };
                 Remove = new Button
                 {
@@ -166,10 +173,17 @@ namespace TagTool
                 EndChip.Content = endChip.ToString();
             }
 
+            private void SelectAll(object sender, RoutedEventArgs e)
+            {
+                TextBox src = (TextBox)e.OriginalSource;
+                src.SelectAll();
+            }
+
             private void KeyPressHandler(object sender, KeyEventArgs e)
             {
-                if (e.Key >= Key.D0 && e.Key <= Key.D9) {}
-                else if (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) {}
+                if (e.Key >= Key.D0 && e.Key <= Key.D9) { }
+                else if (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) { }
+                else if (e.Key == Key.Tab) { }
                 else
                 {
                     e.Handled = true;
@@ -179,13 +193,14 @@ namespace TagTool
 
         private void AddRange_Click(object sender, RoutedEventArgs e)
         {
-            correlationBox.Items.Add(new ATagRange(correlationBox));
+            correlationBox.Items.Add(new ATagRange(correlationBox, num++));
         }
 
         private void Reset()
         {
+            num = 0;
             correlationBox.Items.Clear();
-            correlationBox.Items.Add(new ATagRange(correlationBox));
+            correlationBox.Items.Add(new ATagRange(correlationBox, num++));
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -268,7 +283,7 @@ namespace TagTool
             ranges.Sort();
             using (FileStream outFile = File.Create(filePath))
             {
-                String format = "{0},{1}"; // BIB, TAG
+                String format = "{1},{0}"; // BIB, TAG or not...
                 using (StreamWriter outWriter = new StreamWriter(outFile))
                 {
                     foreach (Range r in ranges)
