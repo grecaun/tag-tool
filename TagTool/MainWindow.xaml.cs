@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿//using ClosedXML.Excel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,7 +53,7 @@ namespace TagTool
                 theGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
                 theGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
                 theGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-                theGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                theGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(40) });
                 StartBib = new TextBox
                 {
                     Text = String.Format("{0}", lastEndBib + 1),
@@ -88,9 +89,9 @@ namespace TagTool
                 };
                 Remove = new Button
                 {
-                    Content = "Remove",
+                    Content = "X",
                     Height = 25,
-                    Width = 65
+                    Width = 30
                 };
                 Remove.Click += new RoutedEventHandler(this.Remove_Click);
                 theGrid.Children.Add(StartBib);
@@ -238,7 +239,23 @@ namespace TagTool
             }
             // Create file in correct place.
             String fileName = "Tag File";
-            String fileExt = ".txt";
+            String fileExt = "??";
+            String filter = "";
+            switch (FileType.SelectedIndex)
+            {
+                case 0: // Text
+                    fileExt = ".txt";
+                    filter = "Text files (*.txt)|*.txt";
+                    break;
+                case 1: // CSV
+                    fileExt = ".csv";
+                    filter = "CSV files (*.csv)|*.csv";
+                    break;
+                /* case 2: // Excel
+                    fileExt = ".xlsx";
+                    filter = "Excel files (*.xlsx)|*.xlsx";
+                    break; */
+            }
             String filePath = "";
             switch (SavePlace.SelectedIndex)
             {
@@ -265,7 +282,7 @@ namespace TagTool
                     break;
                 case 2: // Custom
                     SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.Filter = "Txt files (*.txt)|*.txt";
+                    saveFileDialog.Filter = filter;
                     saveFileDialog.FileName = fileName;
                     Nullable<bool> result = saveFileDialog.ShowDialog();
                     if (result != null && result == true)
@@ -281,11 +298,42 @@ namespace TagTool
                     return;
             }
             ranges.Sort();
+            try
+            {
+                switch (fileExt)
+                {
+                    case ".txt":
+                    case ".csv":
+                        SaveCSV(filePath, ranges);
+                        break;
+                    /*case ".xlsx":
+                        SaveExcel(filePath, ranges);
+                        break;*/
+                    default:
+                        MessageBox.Show("Error saving file. Unknown file type.");
+                        return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving file. " + ex.Message);
+                return;
+            }
+            Reset();
+        }
+
+        private void SaveCSV(string filePath, List<Range> ranges)
+        {
             using (FileStream outFile = File.Create(filePath))
             {
+                // Save to text/csv,
                 String format = "{1},{0}"; // BIB, TAG or not...
                 using (StreamWriter outWriter = new StreamWriter(outFile))
                 {
+                    if (HeaderBox.IsChecked == true)
+                    {
+                        outWriter.WriteLine(String.Format(format, "Chip", "Bib"));
+                    }
                     foreach (Range r in ranges)
                     {
                         for (int bib = r.StartBib, tag = r.StartChip; bib <= r.EndBib && tag <= r.EndChip; bib++, tag++)
@@ -295,7 +343,38 @@ namespace TagTool
                     }
                 }
             }
-            Reset();
+            MessageBox.Show("File saved.");
         }
+
+        /*
+        private void SaveExcel(string filePath, List<Range> ranges)
+        {
+            using (XLWorkbook workbook = new XLWorkbook())
+            {
+                IXLWorksheet worksheet = workbook.Worksheets.Add();
+                List<object[]> localData = new List<object[]>();
+                if (HeaderBox.IsChecked == true)
+                {
+                    localData.Add(new object[] { "Bib", "Chip" });
+                }
+                foreach (Range r in ranges)
+                {
+                    for (int bib = r.StartBib, tag = r.StartChip; bib <= r.EndBib && tag <= r.EndChip; bib++, tag++)
+                    {
+                        localData.Add(new object[] { bib, tag });
+                    }
+                }
+                for (int i = 0; i < localData.Count; i++)
+                {
+                    for (int j = 0; j < localData[0].Length; j++)
+                    {
+                        worksheet.Cell(i + 1, j + 1).Style.NumberFormat.Format = "@";
+                        worksheet.Cell(i + 1, j + 1).Value = localData[i][j] != null ? localData[i][j].ToString() : "";
+                    }
+                }
+                workbook.SaveAs(filePath);
+            }
+            MessageBox.Show("File saved.");
+        }*/
     }
 }
